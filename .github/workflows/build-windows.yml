@@ -1,0 +1,31 @@
+name: Build Windows app
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+
+      - name: Build DarshanFileManager.exe
+        working-directory: src
+        run: |
+          x86_64-w64-mingw32-windres app.rc -O coff -o app.res
+          x86_64-w64-mingw32-gcc -municode -mwindows -static -O2 -s main.c app.res -o DarshanFileManager.exe -lcomctl32 -lshell32 -lole32 -luuid -lgdi32 -ladvapi32
+          ls -l DarshanFileManager.exe
+
+      - name: Upload exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: DarshanFileManager-windows
+          path: src/DarshanFileManager.exe
