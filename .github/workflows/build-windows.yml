@@ -21,7 +21,7 @@ jobs:
         working-directory: src
         run: |
           x86_64-w64-mingw32-windres app.rc -O coff -o app.res
-          x86_64-w64-mingw32-gcc -municode -mwindows -static -O2 -s main.c app.res -o DarshanFileManager.exe -lcomctl32 -lshell32 -lole32 -luuid -lgdi32 -ladvapi32
+          x86_64-w64-mingw32-gcc -municode -mwindows -static -O2 -s main.c core.c lang.c app.res -o DarshanFileManager.exe -lcomctl32 -lshell32 -lole32 -luuid -lgdi32 -ladvapi32
           ls -l DarshanFileManager.exe
 
       - name: Upload exe
